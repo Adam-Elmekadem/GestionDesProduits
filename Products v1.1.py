@@ -32,6 +32,57 @@ class ProduitPhysic(Produit, Vente):
         poids_total = self.poids * self.quantite_stock
         print(f"\nProduit Physique: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {poids_total}kg")
 
+class ProduitAlimentaire(ProduitPhysic):
+    def __init__(self, nom, prix, quantite_stock, poids, date_peremption):
+        super().__init__(nom, prix, quantite_stock, poids)
+        self.date_peremption = date_peremption
+
+    def vendre(self, quantite_vendue):
+        if quantite_vendue <= self.quantite_stock:
+            self.quantite_stock -= quantite_vendue
+            prix_total = quantite_vendue * self.prix
+            print(f"Le prix total : {prix_total}DH\nVente de {quantite_vendue} {self.nom} effectuée.\nNouvelle quantité en stock: {self.quantite_stock}")
+
+        else:
+            print(f"Quantité insuffisante en stock pour la vente de {quantite_vendue} {self.nom}.")
+
+    def afficher_details(self):
+        poids_total = self.poids * self.quantite_stock
+        print(f"Produit Alimentaire: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {poids_total}kg,\nDate de péremption: {self.date_peremption}")
+
+
+class Patesseries(ProduitAlimentaire):
+    def __init__(self, nom, prix, quantite_stock, poids, date_peremption, type_patisserie):
+        super().__init__(nom, prix, quantite_stock, poids, date_peremption)
+        self.type_patisserie = type_patisserie
+
+    def vendre(self, quantite_vendue):
+        if quantite_vendue <= self.quantite_stock:
+            self.quantite_stock -= quantite_vendue
+            prix_total = quantite_vendue * self.prix
+            print(f"Le prix total : {prix_total}DH\nVente de {quantite_vendue} {self.nom} effectuée.\nNouvelle quantité en stock: {self.quantite_stock}")
+        else:
+            print(f"Quantité insuffisante en stock pour la vente de {quantite_vendue} {self.nom}.")
+
+    def afficher_details(self):
+        print(f"Patisserie: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {self.poids_total}kg,\nDate de péremption: {self.date_peremption},\nType de patisserie: {self.type_patisserie}")
+
+class Legume_Fruit(ProduitAlimentaire):
+    def __init__(self, nom, prix, quantite_stock, poids, date_peremption, LeType):
+        super().__init__(nom, prix, quantite_stock, poids, date_peremption)
+        self.LeType = LeType
+
+    def vendre(self, quantite_vendue):
+        if quantite_vendue <= self.quantite_stock:
+            self.quantite_stock -= quantite_vendue
+            prix_total = quantite_vendue * self.prix
+            print(f"Le prix total : {prix_total}DH\nVente de {quantite_vendue} {self.nom} effectuée.\nNouvelle quantité en stock: {self.quantite_stock}")
+        else:
+            print(f"Quantité insuffisante en stock pour la vente de {quantite_vendue} {self.nom}.")
+
+    def afficher_details(self):
+            print(f"Legume/Fruit: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {self.poids_total}kg,\nDate de péremption: {self.date_peremption},\nType de legume/fruit: {self.LeType}")
+
 class Pc(ProduitPhysic):
     def __init__(self, nom, prix, quantite_stock, poids, marque, processeur, taille_ecran):
         super().__init__(nom, prix, quantite_stock, poids)
@@ -65,9 +116,9 @@ class Smartphone(Pc):
         else:
             print(f"Quantité insuffisante en stock pour la vente de {quantite_vendue} {self.nom}.")
 
-        def afficher_details(self):
-            poids_total = self.poids * self.quantite_stock
-            print(f"\nSmartphone: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {poids_total}kg,\nMarque: {self.marque},\nProcesseur: {self.processeur},\nTaille de l'écran: {self.taille_ecran}Pouce,\nRAM: {self.ram}gb,\nCamera: {self.camera}Mpx")
+    def afficher_details(self):
+        poids_total = self.poids * self.quantite_stock
+        print(f"\nSmartphone: {self.nom},\nPrix: {self.prix}DH,\nQuantité en stock: {self.quantite_stock},\nPoids total: {poids_total}kg,\nMarque: {self.marque},\nProcesseur: {self.processeur},\nTaille de l'écran: {self.taille_ecran}Pouce,\nRAM: {self.ram}gb,\nCamera: {self.camera}Mpx")
 
 
 class ProduitNumerique(Produit, Vente):
@@ -187,13 +238,47 @@ def main():
 def ajouter_produit_physique():
     while True:
         print("\n----Ajouter un produit physique----")
-        print("1. Ajouter un PC")
-        print("2. Ajouter un smartphone")
-        print("3. Retour au menu précédent")
+        print("1. Ajouter un produit alimentaire")
+        print("2. Ajouter unn fruit ou  légume")
+        print("3. Ajouter un produit de patteseries")
+        print("4. Ajouter un produit numérique")
+        print("5. Retour au menu précédent")
 
         choix_ajout_produit = input("Choisissez une option : ")
         if choix_ajout_produit == "1":
             # Logic to add a PC
+            nom = input("Nom du produit alimentaire : ")
+            prix = float(input("Prix du produit alimentaire : "))
+            quantite_stock = int(input("Quantité en stock : "))
+            poids = float(input("Poids du produit alimentaire en kg: "))
+            date = input("Date de péremption du produit alimentaire : ")
+            produit_alimentaire = ProduitAlimentaire(nom, prix, quantite_stock, poids, date)
+            stock.ajouter_produit(produit_alimentaire)
+            print(f"Le produit alimentaire {nom} a été ajouté au stock.")
+        elif choix_ajout_produit == "2":
+            #logic add fruit or legume
+            nom = input("Nom du produit alimentaire : ")
+            prix = float(input("Prix du produit alimentaire : "))
+            quantite_stock = int(input("Quantité en stock : "))
+            poids = float(input("Poids du produit alimentaire en kg: "))
+            date = input("Date de péremption du produit alimentaire : ")
+            LeType = input("Type de produit : ")
+            Legume_fruit = Legume_Fruit(nom, prix, quantite_stock, poids, date, LeType)
+            stock.ajouter_produit(Legume_fruit)
+            print(f"Le produit alimentaire {nom} a été ajouté au stock.")
+        elif choix_ajout_produit == "3":
+            #logic add patisserie
+            nom = input("Nom du produit alimentaire : ")
+            prix = float(input("Prix du produit alimentaire : "))
+            quantite_stock = int(input("Quantité en stock : "))
+            poids = float(input("Poids du produit alimentaire en kg: "))
+            date = input("Date de péremption du produit alimentaire : ")
+            type_produit = input("Type de produit : ")
+            produit_patisserie = Patesseries(nom, prix, quantite_stock, poids, date, type_produit)
+            stock.ajouter_produit(produit_patisserie)
+            print(f"Le produit alimentaire {nom} a été ajouté au stock.")
+        elif choix_ajout_produit == "4":
+            #logic add pc
             nom = input("Nom du pc : ")
             prix = float(input("Prix du pc : "))
             quantite_stock = int(input("Quantité en stock : "))
@@ -203,9 +288,9 @@ def ajouter_produit_physique():
             taille_ecran = float(input("Taille de l'écran du pc en pouces : "))
             pc = Pc(nom, prix, quantite_stock, poids, marque, processeur, taille_ecran)
             stock.ajouter_produit(pc)
-            print("Ajout d'un PC.")
+            print(f"Le pc {nom} a été ajouté au stock.")
 
-        elif choix_ajout_produit == "2":
+        elif choix_ajout_produit == "5":
             # Logic to add a smartphone
             nom = input("Nom du smartphone : ")
             prix = float(input("Prix du smartphone : "))
